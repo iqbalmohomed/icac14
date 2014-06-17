@@ -1,0 +1,94 @@
+# ICAC Tutorial Run Book
+# Autonomic Cloud Workload Optimization: Placement in OpenStack
+
+# Vagrant
+I use vagrant with VirtualBox. You can also use other hypervisors.
+
+## Basic Usage
+vagrant box list
+vagrant box add ubuntu/trusty64
+mkdir icacvm
+cd icacvm
+
+## Notable edits in Vagrantfile
+-- Port forwarding
+-- VM networking
+-- Memory
+-- Provisoning
+-- Shared folders
+-- Turn off headless mode
+
+If you make edits to the Vagrantfile, you must reload or create a new vm for the changes to take effect.
+
+## Controlling VM (commands run on host)
+vagrant up # Start up VM
+vagrant status # Shows state of VM
+vagrant ssh # SSH into VM. Don't have to remember ports :)
+vagrant suspend # Suspend the VM
+vagrant halt # Power off the VM
+vagrant destroy # Delete the VM
+
+## More advanced
+vagrant global-status
+Create your own Vagrant box that you can share with others.
+
+## Virtual Box specific
+vboxmanage list vms 
+vboxmanage list runningvms # Gives you a list of VMIDs
+vboxmanage controlvm poweroff VMID
+
+If your vagrant VM gets wedged, vboxmanage can terminate it. In some versions of Virtual Box, you had to go into the GUI, select the VM and unlock changes.
+
+# Devstack
+
+## Getting Devstack
+Get latest info from: http://devstack.org/
+
+On a fresh Ubuntu12.04-14.04 machine, I usually do:
+sudo apt-get update
+sudo apt-get install git
+git clone https://github.com/openstack-dev/devstack.git
+cd devstack
+
+## Controlling your devstack installation
+
+Create a new file called local.conf (used to be called localrc). The old file format still works but you get some more powerful capabilities with the new format. In a nutshell, the new format has various sections. You can put modifications to nova.conf, cinder.conf, etc. in various sections but the neat thing is that it is all in one file. Here is a Basic config with one section:
+[[local|localrc]]
+
+FLOATING_RANGE=192.168.1.224/27
+FIXED_RANGE=10.11.12.0/24
+FIXED_NETWORK_SIZE=256
+FLAT_INTERFACE=eth0
+ADMIN_PASSWORD=secretpassword
+MYSQL_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+VIRT_DRIVER=fake
+NUMBER_FAKE_NOVA_COMPUTE=100
+
+## Lets take our devstack for a spin
+source openrc admin admin # We must specify a user as well as a tenant
+nova hypervisor-list
+nova image-list
+
+## Flavors
+nova flavor-list
+nova flavor-create m1.newflavor 611 10 0 1
+
+## Setup keys
+ssh-keygen -t rsa
+nova keypair-list
+nova keypair-add --pub-key foo.pub newkey
+
+## Security Groups
+nova secgroup-list
+nova secgroup-list-rules default
+nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+
+# Heat
+heat stack-list
+heat create -f basic.yml stackname
+heat template-show testicac
+heat stack-show testicac
+heat resource-list testicac
