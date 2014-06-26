@@ -14,8 +14,11 @@ As part of the provisioning process of the vagrant vm, we:
 Once the vagrant provisioning process is done, log into the vm and run stack.sh as usual:
 
 vagrant ssh
+
 sudo su stack
+
 cd /home/stack/devstack
+
 ./stack.sh
 
 ## Fix bridging
@@ -23,6 +26,7 @@ cd /home/stack/devstack
 We must remove an extra route created by the devstack installation:
 
 sudo route
+
 sudo route del -net 192.168.15.0 netmask 255.255.255.224 br-ex
 
 ## Add DNS to private network 
@@ -36,14 +40,19 @@ We setup a keypair and the default security group to allow ICMP and ssh access
 ### Setup keys
 
 ssh-keygen -t rsa -f cloud
+
 nova keypair-list
+
 nova keypair-add --pub-key cloud.pub cloud
 
 ### Security Groups
 
 nova secgroup-list
+
 nova secgroup-list-rules default
+
 nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+
 nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 
 ## Create new port and boot VM
@@ -64,5 +73,7 @@ sudo ip netns exec qrouter-16b05e53-900f-4cf2-b7d4-18033555bbdc ping 10.0.0.4
 You should also be able to ssh into it:
 
 sudo ip netns exec qrouter-16b05e53-900f-4cf2-b7d4-18033555bbdc ssh cirros@10.0.0.4
+
 Note 1: the password for these images is cubswin:)
+
 Note 2: the vms should be able to connect to the outside world.
