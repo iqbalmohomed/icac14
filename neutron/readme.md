@@ -34,11 +34,13 @@ sudo route
 
 sudo route del -net 192.168.15.0 netmask 255.255.255.224 br-ex
 
-## Add DNS to private network and open ports for ICMP, ssh and web
+## Add DNS to private network and optionally open ports for ICMP, ssh and web
 
 source openrc admin admin
 
 neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
+
+The following three commands may not be necessary. If after booting the VM, you cannot ping or log into it after a minute, then try these out:
 
 neutron security-group-rule-create --protocol icmp --direction ingress default
 
@@ -71,15 +73,24 @@ nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 ## Create new port and boot VM
 
 Finally, we create a port on the private subnet and boot up a vm. I give an example with the IDs generated on my system. You should substitute with the ones generated on your installation:
+
+Make a note of the private network's ID in both of the following commands:
+
 nova net-list
 
+neutron subnet-list
+
+In the following, the first ID is the subnet ID and the second is the network id:
+
 neutron port-create --fixed-ip subnet_id=c57a0503-15c9-44a6-8b4c-24c2b48285b5,ip_address=10.0.0.4 88abd80a-4fc3-4421-8c1d-9617648a2209
+
+In the following, the first ID is the image id (nova image-list) and the second id is from the port created in the previous line.
 
 nova boot --image b62280fe-c3a2-464d-bde6-f989b301789f --flavor m1.nano --key-name cloud --nic port-id=1c70d7f1-9c36-4bb6-86d2-d48ed7e70019 newvm
 
 sudo ip netns list
 
-You should be able to ping the VM:
+You should be able to ping the VM using the network namespace corresponding to the router:
 
 sudo ip netns exec qrouter-16b05e53-900f-4cf2-b7d4-18033555bbdc ping 10.0.0.4
 
