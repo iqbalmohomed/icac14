@@ -2,13 +2,18 @@
 
 ## Summary of provisioning done in Vagrantfile
 
-The Vagrantfile is setup to give the devstack machine the IP 10.0.2.15.
+The Vagrantfile is setup to give the devstack VM a single network interface. We assume the IP is 10.0.2.15.
+
 As part of the provisioning process of the vagrant vm, we:
 
-1. Create a user called stack with a weak password (password)
+1. Create a user called stack with a weak password (**password**)
 2. Install required packages (git, bridge-utils)
 3. Create a bridge called br0, attach eth0 to this bridge and have the bridge get its IP address via DHCP (which should be 10.0.2.15)
 4. Clone the devstack repo (we checkout the icehouse branch)
+
+We start as usual:
+
+vagrant up
 
 ## Running stack.sh
 Once the vagrant provisioning process is done, log into the vm and run stack.sh as usual:

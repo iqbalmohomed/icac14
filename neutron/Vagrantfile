@@ -18,10 +18,11 @@ sudo rm /etc/network/interfaces
 sudo cp /vagrant/netconfig /etc/network/interfaces
 sudo ifdown eth0 && sudo ifup br0 && sudo ifup eth0
 echo "Bridge added successfully"
-
-sudo su - stack
+su - stack
 cd /home/stack
 git clone https://github.com/openstack-dev/devstack.git
+sudo chown -R stack:stack devstack/.[^.]*
+sudo chown -R stack:stack devstack
 cd /home/stack/devstack
 git checkout stable/icehouse
 cp /vagrant/localrc localrc
