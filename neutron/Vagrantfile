@@ -11,11 +11,11 @@ sudo apt-get install -q -y --force-yes git
 sudo useradd -m stack
 sudo adduser stack sudo
 sudo apt-get install -q -y --force-yes bridge-utils
-echo -e "passw0rd\npassw0rd\n" | sudo passwd stack
+echo -e "password\npassword\n" | sudo passwd stack
 
 echo "Adding bridge"
 sudo rm /etc/network/interfaces
-sudo cp /vagrant/net /etc/network/interfaces
+sudo cp /vagrant/netconfig /etc/network/interfaces
 sudo ifdown eth0 && sudo ifup br0 && sudo ifup eth0
 echo "Bridge added successfully"
 
@@ -51,7 +51,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "10.0.2.15"
+  # config.vm.network "private_network", ip: "10.0.2.15"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
