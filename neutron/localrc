@@ -1,0 +1,23 @@
+###
+# Adapted from http://getcloudify.org/2013/12/23/setting_up_devstack_havana_on_your_local_network.html
+###
+
+DATABASE_PASSWORD=password
+RABBIT_PASSWORD=password
+SERVICE_TOKEN=password
+SERVICE_PASSWORD=password
+ADMIN_PASSWORD=password
+FLOATING_RANGE=192.168.15.0/27
+FLAT_INTERFACE=eth0
+LOGFILE=/home/stack/stack.sh.log
+Q_FLOATING_ALLOCATION_POOL=start=192.168.15.10,end=192.168.15.20
+PUBLIC_NETWORK_GATEWAY=192.168.15.1
+ 
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+
