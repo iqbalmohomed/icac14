@@ -84,7 +84,7 @@ In the following, the first ID is the subnet ID and the second is the network id
 
 neutron port-create --fixed-ip subnet_id=c57a0503-15c9-44a6-8b4c-24c2b48285b5,ip_address=10.0.0.4 88abd80a-4fc3-4421-8c1d-9617648a2209
 
-In the following, the first ID is the image id (nova image-list) and the second id is from the port created in the previous line.
+In the following, the first ID is the image id (nova image-list) and the second id is from the port created in the previous line (neutron port-list).
 
 nova boot --image b62280fe-c3a2-464d-bde6-f989b301789f --flavor m1.nano --key-name cloud --nic port-id=1c70d7f1-9c36-4bb6-86d2-d48ed7e70019 newvm
 
