@@ -23,10 +23,10 @@ sudo su - stack
 cd /home/stack
 git clone https://github.com/openstack-dev/devstack.git
 cd /home/stack/devstack
-mkdir screen_logdir
 git checkout stable/icehouse
 cp /vagrant/localrc localrc
-./stack.sh
+
+echo "Provisioning Complete"
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
