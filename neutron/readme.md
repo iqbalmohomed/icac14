@@ -34,9 +34,17 @@ sudo route
 
 sudo route del -net 192.168.15.0 netmask 255.255.255.224 br-ex
 
-## Add DNS to private network 
+## Add DNS to private network and open ports for ICMP, ssh and web
+
+source openrc admin admin
 
 neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8 8.8.4.4
+
+neutron security-group-rule-create --protocol icmp --direction ingress default
+
+neutron security-group-rule-create --protocol tcp --port-range-min 22 --port-range-max 22 --direction ingress default
+
+neutron security-group-rule-create --protocol tcp --port-range-min 80 --port-range-max 80 --direction ingress default
 
 ## Setup usual Openstack resources
 
